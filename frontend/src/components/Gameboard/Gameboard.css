@@ -1,6 +1,7 @@
 .game-board {
     display: grid;
-    grid-template-columns: repeat(var(--cols), var(--tile-size));
-  grid-gap: 0;
-  align-self: flex-start;
+    grid-template-rows:  repeat(50, 20px);
+    grid-template-columns: repeat(50,20px);
+    justify-content: center;
+    margin: 50px
 }

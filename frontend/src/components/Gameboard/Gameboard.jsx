@@ -4,16 +4,16 @@ import Cell from "../Cell/Cell.jsx";
 
 function Gameboard(props) {
   const grid = [];
-
-  for (let row = 0; row < 20; row++) {
-    grid.push([]);
-    for (let col = 0; col < 20; col++) {
-      grid[row].push(<Cell key={`${col}${row}`}/>);
-      
+  for (let row = 0; row < 50; row++) {
+      const currentRow = []
+    for (let col = 0; col < 50; col++) { 
+        currentRow.push(<Cell key={`${col}${row}`}/>) 
     }
+    grid.push(currentRow)
   }
   return (
       <div className = "game-board">
+          
           {grid}
       </div>
   )

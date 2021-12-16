@@ -1,19 +1,17 @@
 import React from "react";
 import "./Gameboard.css";
-import Cell from "../Cell.jsx";
+import Cell from "../Cell/Cell.jsx";
 
 function Gameboard(props) {
   const grid = [];
-  const gridMaker = () => {
-  for (let row = 0; row < 50; row++) {
-    grid.push([]);
-    for (let col = 0; col < 50; col++) {
-      grid[row].push(<Cell key={`${col}${row}`} color="1" />);
+ 
+    for (let row = 0; row < 10; row++) {
+      grid.push([]);
+      for (let col = 0; col < 10; col++) {
+        grid[row].push(<Cell key={`${col}${row}`} color="red" />);
+      }
     }
-  }
-}
-  return;
-  <div>{gridMaker}</div>;
+  return grid
 }
 
 export default Gameboard;

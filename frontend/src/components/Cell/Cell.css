@@ -1,0 +1,9 @@
+.cell-square {
+    border-style: solid;
+    border-color: gray;
+    background-color: white;
+    width: 20px;
+    height: 20px;
+    border-width: 0.5px;
+    background-color: rgb(17, 83, 17);
+}

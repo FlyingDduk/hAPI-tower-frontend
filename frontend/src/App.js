@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import Gameboard from './components/Gameboard/Gameboard.jsx'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1> Tower Boiz</h1>
+        <nav>
+          <ul>
+            <li>Rules</li>
+            <li>GitHub</li>
+          </ul>
+        </nav>
       </header>
+      <main>
+      <Gameboard />
+      </main>
+      <footer>
+        <h3>The Tower Boiz</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </footer>
     </div>
   );
 }

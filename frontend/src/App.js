@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import Gameboard from './components/Gameboard/Gameboard.jsx'
+import Gameboard from "./components/Gameboard/Gameboard.jsx";
 
 function App() {
   return (
@@ -15,9 +15,7 @@ function App() {
         </nav>
       </header>
       <main>
-        <h1>Where the gameboard is supposed to be</h1>
-      <Gameboard />
-      
+        <Gameboard />
       </main>
       <footer>
         The Tower Boiz

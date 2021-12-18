@@ -18,7 +18,7 @@ function Canvas(props) {
 
         animate();
     }, []);
-    
+
 /*     canvas.width = 1400;
     canvas.heigh = 700;  */
 
@@ -28,7 +28,7 @@ function Canvas(props) {
     const cellGap = 3;
     const gameGrid = [];
 
-   
+
 
     class Cell {
         constructor(x,y) {
@@ -38,12 +38,15 @@ function Canvas(props) {
             this.height = cellSize;
         }
         draw() {
+
             ctx.strokeStyle = `black`;
+
             ctx.strokeRect(this.x, this.y, this.width, this.height);
         }
     }
 
     function createGrid() {
+
         for(let y = cellSize; y < 1400; y += cellSize){
             for(let x = 0; x < 700; x += cellSize){
                 gameGrid.push(new Cell((x,y)))
@@ -66,6 +69,7 @@ function Canvas(props) {
         requestAnimationFrame(animate);
     }
     animate(); 
+
     return (
         <div>
             <canvas id="canvas1"></canvas>

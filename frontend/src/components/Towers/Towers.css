@@ -1,5 +1,6 @@
+/* Changes size of each tower */
 img {
-    position: relative;
+    /* position: relative; */
     height: 50px;
     width: 50px;
 }

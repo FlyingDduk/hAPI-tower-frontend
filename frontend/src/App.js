@@ -3,8 +3,7 @@ import "./App.css";
 import Gameboard from "./components/Gameboard/Gameboard.jsx";
 import Towers from "./components/Towers/Towers.jsx";
 import Enemies from "./components/Enemies/Enemies.jsx";
-import Canvas from "./components/Canvas/Canvas.jsx";
-
+import Canvas from "./components/Canvas/Canvas.jsx"
 
 function App() {
   return (
@@ -26,7 +25,6 @@ function App() {
       <main>
         <div className = "gameboard">
           <Canvas />
-          {/* <Gameboard /> */}
         </div>
         <div className="tower-choice">
           <Towers />

@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import Gameboard from "./components/Gameboard/Gameboard.jsx";
 import Towers from "./components/Towers/Towers.jsx";
+import Enemies from "./components/Enemies/Enemies.jsx";
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
         <Gameboard />
         <div className="tower-choice">
           <Towers />
+        </div>
+        <div className="enemy">
+          <Enemies />
         </div>
       </main>
       <footer>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useState, useEffect, useRef } from "react"
 import "./Canvas.css";
@@ -7,14 +6,9 @@ import "./Canvas.css";
 function Canvas(props) {
 
 
-
-
-
     const cellSize = 20;
     const cellGap = 3;
     const gameGrid = [];
-
-
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
 
@@ -43,6 +37,7 @@ function Canvas(props) {
             this.width = cellSize;
             this.height = cellSize;
         }
+
         draw(){
             ctxRef.current.strokeStyle = 'black';
             ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);

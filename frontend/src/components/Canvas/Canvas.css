@@ -1,8 +1,15 @@
-#canvas1{
-    border: 1px solid white;
-    position: relative;
-    width: 1400px;
-    height: 700px;
-    justify-content: center;
-    margin: 50px;
+
+#canvas1 {
+  border: 3px solid white;
+  position: relative;
+  justify-content: center;
+  margin: 50px;
+  width: 1400px;
+  height: 700px;
+  background: white;
 }
+
+/* width/height calculated
+cell size = 20px
+width = 20 * 70
+height = 20 * 35 */

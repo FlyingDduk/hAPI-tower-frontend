@@ -3,8 +3,12 @@ import "./App.css";
 import Gameboard from "./components/Gameboard/Gameboard.jsx";
 import Towers from "./components/Towers/Towers.jsx";
 import Enemies from "./components/Enemies/Enemies.jsx";
+<<<<<<< HEAD
 import Canvas from "./components/Canvas/Canvas.jsx";
 
+=======
+import Canvas from "./components/Canvas/Canvas.jsx"
+>>>>>>> Started canvas stuff
 
 function App() {
   return (
@@ -21,7 +25,10 @@ function App() {
       <main>
         <div className = "gameboard">
           <Canvas />
+<<<<<<< HEAD
           {/* <Gameboard /> */}
+=======
+>>>>>>> Started canvas stuff
         </div>
         <div className="tower-choice">
           <Towers />

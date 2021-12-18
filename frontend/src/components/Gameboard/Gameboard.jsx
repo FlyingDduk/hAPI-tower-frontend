@@ -13,7 +13,6 @@ function Gameboard(props) {
   }
   return (
       <div className = "game-board">
-          
           {grid}
       </div>
   )

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 #canvas1 {
   border: 3px solid white;
@@ -13,3 +14,13 @@
 cell size = 20px
 width = 20 * 70
 height = 20 * 35 */
+=======
+#canvas1{
+    background: white;
+    position: relative;
+    width: 1400px;
+    height: 700px;
+    justify-content: center;
+    margin: 50px;
+}
+>>>>>>> Started canvas stuff

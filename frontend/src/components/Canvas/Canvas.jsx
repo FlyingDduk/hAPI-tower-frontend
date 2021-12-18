@@ -5,26 +5,28 @@ import "./Canvas.css";
 
 function Canvas(props) {
 
+ 
 
-    const cellSize = 20;
+
+
+    const cellSize = 30;
     const cellGap = 3;
     const gameGrid = [];
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
 
-    createGrid();
-
     useEffect(() =>{
         const canvas = canvasRef.current;
-        canvas.width = 1400;
-        canvas.height = 700;
+
+        canvas.width = 1650;
+        canvas.height = 750;
 
         const ctx = canvas.getContext('2d');
 
         ctxRef.current = ctx;
 
 
-        console.log(ctxRef);
+        createGrid();
         animate();
 
     }, []);
@@ -47,12 +49,15 @@ function Canvas(props) {
     }
 
     function createGrid(){
-        console.log(canvasRef.current);
-        for(let y = cellSize; y<canvasRef.current.height; y+=cellSize){
+        const canvas = canvasRef.current;
+        console.log(canvas);
+        if(canvas!=null){
+        for(let y = 0; y<canvasRef.current.height; y+=cellSize){
             for(let x = 0; x<canvasRef.current.width; x+= cellSize){
                 gameGrid.push(new Cell(x,y));
             }
         }
+    }
 
     }
 

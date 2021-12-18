@@ -5,15 +5,11 @@ import "./Canvas.css";
 
 function Canvas(props) {
 
-
-<<<<<<< HEAD
+ 
 
 
 
     const cellSize = 30;
-=======
-    const cellSize = 20;
->>>>>>> origin
     const cellGap = 3;
     const gameGrid = [];
     const canvasRef = useRef(null);

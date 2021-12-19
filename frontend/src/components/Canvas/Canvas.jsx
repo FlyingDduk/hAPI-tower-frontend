@@ -73,7 +73,7 @@ function Canvas(props) {
       }
     }
   }
-
+  createGrid();
   function handleGameGrid() {
     for (let i = 0; i < gameGrid.length; i++) {
       gameGrid[i].draw();

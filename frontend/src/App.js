@@ -1,8 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Gameboard from "./components/Gameboard/Gameboard.jsx";
-import Towers from "./components/Towers/Towers.jsx";
-import Enemies from "./components/Enemies/Enemies.jsx";
+// import Towers from "./components/Towers/Towers.jsx";
+// import Enemies from "./components/Enemies/Enemies.jsx";
 import Canvas from "./components/Canvas/Canvas.jsx"
 
 
@@ -29,10 +29,10 @@ function App() {
           {/* <Gameboard /> */}
         </div>
         <div className="tower-choice">
-          <Towers />
+          {/* <Towers /> */}
         </div>
         <div className="enemy">
-          <Enemies />
+          {/* <Enemies /> */}
         </div>
       </main>
       <footer>

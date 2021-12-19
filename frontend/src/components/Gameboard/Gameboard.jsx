@@ -4,9 +4,9 @@ import Cell from "../Cell/Cell.jsx";
 
 function Gameboard(props) {
   const grid = [];
-  for (let row = 0; row < 35; row++) {
+  for (let row = 0; row < 25; row++) {
       const currentRow = []
-    for (let col = 0; col < 70; col++) { 
+    for (let col = 0; col < 55; col++) { 
         currentRow.push(<Cell key={`${col}${row}`}/>) 
     }
     grid.push(currentRow)

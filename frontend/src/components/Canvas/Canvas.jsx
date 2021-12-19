@@ -10,19 +10,21 @@ function Canvas(props) {
   const ctxRef = useRef(null);
   const canvasPositionRef = useRef(null);
   const mouse = {
-    x: 10,
-    y: 10,
+    x: -3,
+    y: -3,
     width: 0.1,
     height: 0.1,
   };
 
   const handleMouseMove = (e) => {
-    mouse.x = e.x - canvasPositionRef.current.left;
-    mouse.y = e.y - canvasPositionRef.current.top;
+    mouse.x = e.clientX - canvasPositionRef.current.left;
+    mouse.y = e.clientY - canvasPositionRef.current.top;
+
+    console.log(e)
   };
   const handleMouseLeave = () => {
-    mouse.x = undefined;
-    mouse.y = undefined;
+    mouse.x = -3;
+    mouse.y = -3;
   };
 
   useEffect(() => {
@@ -50,7 +52,10 @@ function Canvas(props) {
     }
 
     draw() {
+      //console.log(mouse);
+     
       if (collision(this, mouse)) {
+        //console.log("coliding with: " + this.x)
         ctxRef.current.strokeStyle = "black";
         ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
       }
@@ -59,7 +64,6 @@ function Canvas(props) {
 
   function createGrid() {
     const canvas = canvasRef.current;
-    console.log(canvas);
     if (canvas != null) {
       for (let y = 0; y < canvasRef.current.height; y += cellSize) {
         for (let x = 0; x < canvasRef.current.width; x += cellSize) {
@@ -76,30 +80,29 @@ function Canvas(props) {
   }
 
   function animate() {
-    if (ctxRef.current != null) {
       ctxRef.current.clearRect(
         0,
         0,
         canvasRef.current.width,
         canvasRef.current.height
       );
-    }
+    
     handleGameGrid();
     requestAnimationFrame(animate);
   }
-  animate();
 
   function collision(first, second) {
     if (
       !(
         first.x > second.x + second.width ||
-        first.x + first.width > second.x ||
+        first.x + first.width < second.x ||
         first.y > second.y + second.height ||
-        first.y + first.height > second.y
+        first.y + first.height < second.y
       )
     ) {
       return true;
     }
+    return false;
   }
 
   return (

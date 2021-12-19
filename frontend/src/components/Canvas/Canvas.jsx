@@ -38,9 +38,8 @@ function Canvas(props) {
 
     canvasPositionRef.current = canvasPosition;
     ctxRef.current = ctx;
-
-    createGrid();
-    animate();
+    createGrid()
+    animate()
   }, []);
 
   class Cell {

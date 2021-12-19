@@ -9,6 +9,8 @@ function Canvas(props) {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const canvasPositionRef = useRef(null);
+  const defenders= [];
+  let numberOfResources = 300;
   const mouse = {
     x: -3,
     y: -3,
@@ -87,6 +89,7 @@ function Canvas(props) {
       );
     
     handleGameGrid();
+    handleDefenders();
     requestAnimationFrame(animate);
   }
 
@@ -101,9 +104,44 @@ function Canvas(props) {
     ) {
       return true;
     }
-    return false;
   }
 
+  class Defender {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.width = cellSize;
+      this.height = cellSize;
+      this.shooting = false;
+      this.health = 100;
+      this.projectiles = [];
+      this.timer = 0;
+    }
+    draw(){
+      ctxRef.current.fillStyle = 'blue';
+      ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+      ctxRef.current.fillStyle = 'gold';
+      ctxRef.current.font = '20px Arial';
+      ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
+    }
+  }
+
+  const handleMouseClick = () =>{
+    const gridPositionX = mouse.x - (mouse.x % cellSize);
+    const gridPositionY = mouse.y - (mouse.y % cellSize);
+    if(gridPositionY < cellSize) return;
+    let defenderCost = 100;
+    if(numberOfResources >= defenderCost){
+      defenders.push(new Defender(gridPositionX, gridPositionY));
+      numberOfResources -= defenderCost;
+    }
+  }
+
+  function handleDefenders(){
+    for(let i = 0; i < defenders.length; i++){
+      defenders[i].draw()
+    }
+  }
   return (
     <div>
       <canvas
@@ -111,6 +149,7 @@ function Canvas(props) {
         ref={canvasRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onClick={handleMouseClick}
       ></canvas>
     </div>
   );

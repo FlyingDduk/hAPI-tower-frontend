@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Gameboard from "./components/Gameboard/Gameboard.jsx";
 // import Towers from "./components/Towers/Towers.jsx";

@@ -8,11 +8,22 @@ function Canvas(props) {
   const gameGrid = [];
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
-
+  const canvasPositionRef = useRef(null);
   const mouse = {
-    
-  }
+    x: 10,
+    y: 10,
+    width: 0.1,
+    height: 0.1,
+  };
 
+  const handleMouseMove = (e) => {
+    mouse.x = e.x - canvasPositionRef.current.left;
+    mouse.y = e.y - canvasPositionRef.current.top;
+  };
+  const handleMouseLeave = () => {
+    mouse.x = undefined;
+    mouse.y = undefined;
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,12 +32,15 @@ function Canvas(props) {
     canvas.height = 750;
 
     const ctx = canvas.getContext("2d");
+    const canvasPosition = canvas.getBoundingClientRect();
 
+    canvasPositionRef.current = canvasPosition;
     ctxRef.current = ctx;
 
     createGrid();
     animate();
   }, []);
+
   class Cell {
     constructor(x, y) {
       this.x = x;
@@ -36,8 +50,10 @@ function Canvas(props) {
     }
 
     draw() {
-      ctxRef.current.strokeStyle = "black";
-      ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
+      if (collision(this, mouse)) {
+        ctxRef.current.strokeStyle = "black";
+        ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
+      }
     }
   }
 
@@ -60,13 +76,40 @@ function Canvas(props) {
   }
 
   function animate() {
+    if (ctxRef.current != null) {
+      ctxRef.current.clearRect(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
+    }
     handleGameGrid();
     requestAnimationFrame(animate);
+  }
+  animate();
+
+  function collision(first, second) {
+    if (
+      !(
+        first.x > second.x + second.width ||
+        first.x + first.width > second.x ||
+        first.y > second.y + second.height ||
+        first.y + first.height > second.y
+      )
+    ) {
+      return true;
+    }
   }
 
   return (
     <div>
-      <canvas id="canvas1" ref={canvasRef}></canvas>
+      <canvas
+        id="canvas1"
+        ref={canvasRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      ></canvas>
     </div>
   );
 }

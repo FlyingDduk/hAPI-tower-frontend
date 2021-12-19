@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "./Canvas.css";
 
 function Canvas(props) {
+<<<<<<< HEAD
   const cellSize = 30;
   const cellGap = 3;
   const gameGrid = [];
@@ -47,6 +48,50 @@ function Canvas(props) {
       this.y = y;
       this.width = cellSize;
       this.height = cellSize;
+=======
+
+
+
+
+
+    const cellSize = 30;
+    const cellGap = 3;
+    const gameGrid = [];
+    const canvasRef = useRef(null);
+    const ctxRef = useRef(null);
+
+    useEffect(() =>{
+        const canvas = canvasRef.current;
+
+        canvas.width = 1650;
+        canvas.height = 750;
+
+        const ctx = canvas.getContext('2d');
+
+        ctxRef.current = ctx;
+
+
+        createGrid();
+        animate();
+
+    }, []);
+
+
+    class Cell {
+        constructor(x,y){
+            this.x = x;
+            this.y = y;
+            this.width = cellSize;
+            this.height = cellSize;
+        }
+
+        draw(){
+            ctxRef.current.strokeStyle = 'black';
+            ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
+
+        }
+
+>>>>>>> fixed weird stuff
     }
 
     draw() {

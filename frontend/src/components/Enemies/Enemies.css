@@ -1,0 +1,9 @@
+.enemies {
+    position: relative;
+    display: block;
+    height: 50px;
+    width: 50px;
+    left: 1050px;
+    margin-bottom: 10px;
+    top: -50px;
+}

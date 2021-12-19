@@ -1,6 +1,19 @@
 /* Changes size of each tower */
 img {
     /* position: relative; */
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
+    /* margin-bottom: 5px */
 }
+
+.towers {
+    position: relative;
+    /* height:50px;
+    width: 50px; */
+    left: 830px;
+    margin-bottom: 10px;
+}
+
+/* .tower-container {
+    width: 50px;
+} */

@@ -1,16 +1,16 @@
 .App {
   text-align: center;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-
-html,body {
+html,
+body {
   /* To prevent any scrolling to extra part of window screen */
-  margin:0;
-  padding:0;
-  overflow-x:hidden;
-  overflow-y:hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 body {
@@ -40,25 +40,53 @@ body {
   /* margin: -50px; */
   display: flex;
   justify-content: center;
-  list-style-type: none; 
+  list-style-type: none;
 }
 
 .navbar-boiz a {
   color: white;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 footer {
   position: relative;
-  /* left: 100px; */
-
+  left: 30px;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-.tower-choice {
-  position: relative;
-  top: 50%;
-  left: 50%;
+@media only screen and (max-width: 1900px) {
+  .tower-choice {
+    position: relative;
+    left: 100px;
+    width: 200px;
+    top: -40px;
+  }
+
+  .enemy {
+    width: 300px;
+    position: relative;
+    left: 1350px;
+    top: -90px;
+  }
+}
+@media only screen and (min-width: 1900px) {
+  .tower-choice {
+    position: relative;
+    left: 50px;
+    top: -450px;
+  }
+
+  .enemy {
+    position: relative;
+    left: 1850px;
+    top: -600px;
+  }
+}
+
+#tower-boiz {
+  color: yellow;
 }

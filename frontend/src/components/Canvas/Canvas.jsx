@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { DragSource } from "react-dnd";
 import "./Canvas.css";
 
 function Canvas(props) {
@@ -20,22 +21,23 @@ function Canvas(props) {
   const enemyPositions = []
   const projectiles = [];
   const resources = [];
+  const pathCells = []
   // const [numberOfResources, setNumberOfResources] = useState(300)
 
 //25 55
  
 const mapArr = [
-    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","X","X","X","X","X","O","O","O",],
-    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","X","X","X","X","X","O","O","O","X","O","O","O",],
-    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","X","X","X","X","X","O","O","O","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","O","O","O","X","X","X","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","O","O","O","O","X","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","X","O","O","O",],
     ["X","X","X","X","X","O","O","O","O","O","O","O","O","O","X","X","X","O","X","X","O","O","O","O","O","O","O","O","X","O","O","X","X","X","X","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","X","O","O","O",],
     ["O","O","O","O","X","O","O","O","X","X","X","X","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","O","O","X","O","O","X","O","O","O","O","O","X","X","X","X","O","O","O","O","O","X","O","X","X","O","O",],
     ["O","O","O","O","X","O","O","O","X","O","O","O","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
-    ["O","O","O","O","X","O","O","O","X","O","O","O","X","X","X","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
-    ["O","O","O","O","X","O","O","O","X","O","O","O","X","X","O","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","O","O","X","O","O","O","X","O","O","O","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","O","O","X","O","O","O","X","O","O","O","X","X","X","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
     ["O","O","X","X","X","O","O","O","X","X","O","O","O","O","O","O","X","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
     ["O","O","X","O","O","O","O","O","O","X","O","O","O","O","X","X","X","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","X","X","O","O","X","X","X","X","O","O","X","O","O","X","O","O",],
     ["O","O","X","O","O","O","O","O","O","X","X","O","O","O","X","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","X","X","X","O","O","X","O","O","O","X","O","O","O","O","O","O","X","O","O","X","O","O","X","X","X",],
@@ -63,8 +65,6 @@ const mapArr = [
   const handleMouseMove = (e) => {
     mouse.x = e.clientX - canvasPositionRef.current.left;
     mouse.y = e.clientY - canvasPositionRef.current.top;
-
-    console.log(e);
   };
   const handleMouseLeave = () => {
     mouse.x = -3;
@@ -97,10 +97,8 @@ const mapArr = [
     }
 
     draw() {
-      //console.log(mouse);
 
-      if (collision(this, mouse)) {
-        //console.log("coliding with: " + this.x)
+      if (collision(this, mouse) && !this.path) {
         ctxRef.current.strokeStyle = "black";
         ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
       }
@@ -116,8 +114,9 @@ const mapArr = [
     if (canvas != null) {
       for (let y = 0; y < canvasRef.current.height; y += cellSize) {
         for (let x = 0; x < canvasRef.current.width; x += cellSize) {
-          console.log("Y: " + y/cellSize+ "X: " + x/cellSize)
-          if(mapArr[y/cellSize][x/cellSize] === "X"){gameGrid.push(new Cell(x, y,true));}
+          if(mapArr[y/cellSize][x/cellSize] === "X"){
+            gameGrid.push(new Cell(x, y,true));
+          }
           else{gameGrid.push(new Cell(x, y,false));}
         }
       }
@@ -145,9 +144,7 @@ const mapArr = [
     handleGameStatus();
     handleProjectiles();
     handleResources();
-    // ctxRef.current.fillText('Resources: ' + numberOfResources, 20, 55);
     frame++;
-    // console.log(frame);
     if (!gameOver) requestAnimationFrame(animate);
   }
 
@@ -248,10 +245,17 @@ const mapArr = [
 
 
   /* =====================Enemies===================== */
+  //24 13
+  //gridArr[13][24] is starting path coordinate
   class Enemy {
-    constructor(verticalPosition) {
+    constructor() {
+      this.gridX = 54;
+      this.gridY = 13;
+      this.targetX = cellSize*54 + cellGap;
+      this.targetY = cellSize*13 + cellGap;
+      this.direction = "left";
       this.x = canvasRef.current.width;
-      this.y = verticalPosition;
+      this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
       this.speed = Math.random() * 0.2 + 0.4;
@@ -259,8 +263,89 @@ const mapArr = [
       this.health = 100;
       this.maxHealth = this.health;
     }
+
+    updateTarget() {
+
+      if(this.direction !== "down" && this.gridY-1 >=0 && mapArr[this.gridY - 1][this.gridX] === "X" ){
+        this.direction = "up";
+        this.gridY = this.gridY - 1;
+        this.targetY = this.gridY*cellSize + cellGap;
+      }
+      else if(this.direction !== "up" && this.gridY+1 <=25 && mapArr[this.gridY + 1][this.gridX] === "X" ){
+        this.direction = "down";
+        this.gridY = this.gridY + 1;
+        this.targetY = this.gridY*cellSize + cellGap;
+      }
+      else if(this.direction !== "right" && this.gridX-1 >=0 && mapArr[this.gridY][this.gridX - 1] === "X" ){
+        this.direction = "left";
+        this.gridX = this.gridX - 1;
+        this.targetX = this.gridX*cellSize + cellGap;
+      }
+      else if(this.direction !== "left" && this.gridX+1 <=54 && mapArr[this.gridY][this.gridX + 1] === "X" ){
+        this.direction = "right";
+        this.gridX = this.gridX + 1;
+        this.targetX = this.gridX*cellSize + cellGap;
+      }
+
+    }
+
+
     update() {
-      this.x -= this.movement;
+
+      console.log("Direction: " + this.direction);
+      console.log("Y: " + this.x);
+      console.log("Target Y: " + this.targetX);
+
+      if(this.direction === "left"){
+       
+        if(this.x >this.targetX){
+          this.x -= this.movement;
+        }
+        
+        if(this.x<= this.targetX){
+          this.x = this.targetX;
+          this.updateTarget();
+        }
+    
+      }
+      else if(this.direction === "right"){
+       
+        if(this.x <this.targetX){
+          this.x += this.movement;
+        }
+        
+        if(this.x>= this.targetX){
+          this.x = this.targetX;
+          this.updateTarget();
+        }
+    
+      }
+      else if(this.direction === "up"){
+       
+        if(this.y >this.targetY){
+          this.y -= this.movement;
+        }
+        
+        if(this.y<= this.targetY){
+          this.y = this.targetY;
+          this.updateTarget();
+        }
+    
+      }
+      else if(this.direction === "down"){
+       
+        if(this.y <this.targetY){
+          this.y += this.movement;
+        }
+        
+        if(this.y>= this.targetY){
+          this.y = this.targetY;
+          this.updateTarget();
+        }
+    
+      }
+
+   
     }
     draw() {
       ctxRef.current.fillStyle = "red";
@@ -282,21 +367,14 @@ const mapArr = [
         let gainedResources = enemies[i].maxHealth/10;
         numberOfResources += gainedResources;
         score += gainedResources;
-        const findThisIndex = enemyPositions.indexOf(enemies[i].i);
-        enemyPositions.splice(findThisIndex, 1);
         enemies.splice(i, 1);
-        i--;
-        console.log(enemyPositions)
+
       }
     }
     if (frame % enemiesInterval === 0 && score < winningScore) {
       /* if set to 25, it brings an enemy one block down, weird */
-      let verticalPosition = 12 * cellSize + cellGap;
-      enemies.push(new Enemy(verticalPosition));
+      enemies.push(new Enemy());
       
-      enemyPositions.push(verticalPosition);
-      if (enemiesInterval > 120) enemiesInterval -= 50;
-      console.log(enemyPositions)
     }
   }
 
@@ -342,7 +420,6 @@ const mapArr = [
         projectiles.splice(i, 1);
         i--;
       }
-      // console.log('projectiles ' + projectiles.length);
     }
   }
 

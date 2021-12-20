@@ -3,12 +3,6 @@ import "./Towers.css";
 import { useDrag } from "react-dnd";
 
 function Towers(props) {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "image",
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
 
   return (
     <div class = "tower-container"> 
@@ -17,8 +11,6 @@ function Towers(props) {
           src={require("../images/Marine/Marine-Front.png")}
           alt="Marine Front"
           className="towers"
-          ref = {drag}
-          style={{border: isDragging? "3px solid green":"0px"}}
         />
         <img
           id="ODST-Front"

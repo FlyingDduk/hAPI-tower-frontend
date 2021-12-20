@@ -2,7 +2,7 @@ import React from "react";
 import "./Enemies.css";
 function Enemies(props) {
   return (
-    <div>
+    <div className = "enemy-container">
         <img
           id="Grunt"
           src={require("../images/Enemies/Grunt.png")}

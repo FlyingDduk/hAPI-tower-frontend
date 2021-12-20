@@ -17,11 +17,40 @@ function Canvas(props) {
   const winningScore = 30;
   const defenders = [];
   const enemies = [];
-  const enemyPositions = [];
+  const enemyPositions = []
   const projectiles = [];
   const resources = [];
   // const [numberOfResources, setNumberOfResources] = useState(300)
 
+//25 55
+ 
+const mapArr = [
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","X","X","X","X","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","X","X","X","X","X","O","O","O","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","O","O","O","O","X","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","X","O","O","O",],
+    ["X","X","X","X","X","O","O","O","O","O","O","O","O","O","X","X","X","O","X","X","O","O","O","O","O","O","O","O","X","O","O","X","X","X","X","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","X","O","O","O",],
+    ["O","O","O","O","X","O","O","O","X","X","X","X","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","O","O","X","O","O","X","O","O","O","O","O","X","X","X","X","O","O","O","O","O","X","O","X","X","O","O",],
+    ["O","O","O","O","X","O","O","O","X","O","O","O","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","O","O","X","O","O","O","X","O","O","O","X","X","X","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","O","O","X","O","O","O","X","O","O","O","X","X","O","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","X","X","X","O","O","O","X","X","O","O","O","O","O","O","X","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
+    ["O","O","X","O","O","O","O","O","O","X","O","O","O","O","X","X","X","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","X","X","O","O","X","X","X","X","O","O","X","O","O","X","O","O",],
+    ["O","O","X","O","O","O","O","O","O","X","X","O","O","O","X","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","X","X","X","O","O","X","O","O","O","X","O","O","O","O","O","O","X","O","O","X","O","O","X","X","X",],
+    ["O","O","X","X","X","O","O","O","O","O","X","O","O","X","X","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","X","O","O","X","O","O","X","X","O","O","O","O","O","O","X","O","O","X","O","O","O","O","O",],
+    ["O","O","O","O","X","O","O","O","O","O","X","X","O","X","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","X","X","X","X","O","O","X","O","O","O","O","O","O","O","X","X","O","X","O","O","O","O","O",],
+    ["O","O","O","O","X","X","X","X","O","O","O","X","O","X","O","O","O","O","O","X","O","O","O","O","O","O","X","X","X","X","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","X","O","X","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","X","O","O","O","X","O","X","X","O","O","O","O","X","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","O","O","O","O","O","X","O","X","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","X","O","O","O","X","O","O","X","O","O","O","O","X","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","X","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","X","O","O","O","X","O","O","X","X","O","O","O","X","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","O",],
+    ["O","O","O","X","X","X","X","X","O","O","O","X","O","O","O","X","X","X","X","X","O","O","O","O","O","O","X","X","X","X","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","X","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","X","X","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","X","O","O","O","O","O","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","X","X","X","X","X","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
+    ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",]  
+  ]
 
   /* =====================Mouse Movement===================== */
   const mouse = {
@@ -59,11 +88,12 @@ function Canvas(props) {
 
   /* =====================Create Grid Board===================== */
   class Cell {
-    constructor(x, y) {
+    constructor(x, y,path) {
       this.x = x;
       this.y = y;
       this.width = cellSize;
       this.height = cellSize;
+      this.path=path;
     }
 
     draw() {
@@ -74,6 +104,10 @@ function Canvas(props) {
         ctxRef.current.strokeStyle = "black";
         ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
       }
+      if(this.path){
+        ctxRef.current.fillStyle = "#b5651e";
+        ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+      }
     }
   }
 
@@ -82,7 +116,9 @@ function Canvas(props) {
     if (canvas != null) {
       for (let y = 0; y < canvasRef.current.height; y += cellSize) {
         for (let x = 0; x < canvasRef.current.width; x += cellSize) {
-          gameGrid.push(new Cell(x, y));
+          console.log("Y: " + y/cellSize+ "X: " + x/cellSize)
+          if(mapArr[y/cellSize][x/cellSize] === "X"){gameGrid.push(new Cell(x, y,true));}
+          else{gameGrid.push(new Cell(x, y,false));}
         }
       }
     }
@@ -139,6 +175,7 @@ function Canvas(props) {
       this.health = 50;
       this.projectiles = [];
       this.timer = 0;
+      this.target = null;
     }
     draw() {
          // const marine = ctxRef.drawImage(<img src={require("../images/Marine/Marine-Front.png")} alt = "Marine"/>) 
@@ -153,7 +190,7 @@ function Canvas(props) {
       if(this.shooting){
       this.timer++;
       if(this.timer % 100 === 0){
-        projectiles.push(new Projectile(this.x+15, this.y+15))
+        projectiles.push(new Projectile(this.x+15, this.y+15, this.target))
       }
     }else {
       this.timer = 0;
@@ -181,11 +218,20 @@ function Canvas(props) {
       defenders[i].update();
       /* This check if enemy is in row. If so, it will shoot */
       /* Not working correctly */
-      if(enemyPositions.indexOf(defenders[i].y) !== -1){
-        defenders[i].shooting = true;
-      }else{
-        defenders[i].shooting = false;
+
+      defenders[i].shooting = false;
+      for(let j=0; j<enemies.length; j++){
+
+      if(
+        (enemies[j].y < (defenders[i].y + 150) &&
+        enemies[j].y > (defenders[i].y - 150)  &&
+        enemies[j].x < (defenders[i].x + 150) &&
+        enemies[j].x > (defenders[i].x - 150) ) 
+        ){
+          defenders[i].shooting = true;
+          defenders[i].target = enemies[j];
       }
+    }
       for (let j = 0; j < enemies.length; j++) {
         if (defenders[i] && collision(defenders[i], enemies[j])) {
           enemies[j].movement = 0;
@@ -199,6 +245,7 @@ function Canvas(props) {
       }
     }
   }
+
 
   /* =====================Enemies===================== */
   class Enemy {
@@ -244,8 +291,9 @@ function Canvas(props) {
     }
     if (frame % enemiesInterval === 0 && score < winningScore) {
       /* if set to 25, it brings an enemy one block down, weird */
-      let verticalPosition = Math.floor(Math.random() * 24 + 1) * cellSize + cellGap;
+      let verticalPosition = 12 * cellSize + cellGap;
       enemies.push(new Enemy(verticalPosition));
+      
       enemyPositions.push(verticalPosition);
       if (enemiesInterval > 120) enemiesInterval -= 50;
       console.log(enemyPositions)
@@ -254,16 +302,20 @@ function Canvas(props) {
 
   /* =====================Projectiles===================== */
   class Projectile {
-    constructor(x, y) {
+    constructor(x, y, target) {
       this.x = x;
       this.y = y;
       this.width = 5;
       this.height = 5;
       this.power = 20;
       this.speed = 5;
+      this.target = target;
     }
     update() {
-      this.x += this.speed;
+      if (this.x < this.target.x){this.x += this.speed;}
+      else if(this.x > this.target.x){this.x -= this.speed;}
+      if (this.y < this.target.y){this.y += this.speed;}
+      else if(this.y > this.target.y){this.y -= this.speed;}
     }
     draw() {
       ctxRef.current.fillStyle = "black";

@@ -2,6 +2,13 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { DragSource } from "react-dnd";
 import "./Canvas.css";
+import smiley from '../../images/smiley.gif'
+import grunt from '../../images/Enemies/Grunt.png'
+import marine from '../../images/Marine/Marine-Front.png'
+import odst from '../../images/ODST/ODST-Front.png'
+import mc from '../../images/MC/MC-Front.png'
+import johnson from '../../images/Johnson/Johnson-Front.png'
+
 
 function Canvas(props) {
   const cellSize = 30;
@@ -21,7 +28,9 @@ function Canvas(props) {
   const enemyPositions = []
   const projectiles = [];
   const resources = [];
-  const pathCells = []
+  const pathCells = [];
+  const enemyImg = new Image();
+
   // const [numberOfResources, setNumberOfResources] = useState(300)
 
 //25 55
@@ -97,7 +106,6 @@ const mapArr = [
     }
 
     draw() {
-
       if (collision(this, mouse) && !this.path) {
         ctxRef.current.strokeStyle = "black";
         ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
@@ -156,13 +164,13 @@ const mapArr = [
         first.y > second.y + second.height ||
         first.y + first.height < second.y
       )
-    ) {
+    ){
       return true;
     }
   }
 
   /* =====================Defender===================== */
-  class Defender {
+  class Defender { 
     constructor(x, y) {
       this.x = x;
       this.y = y;
@@ -172,18 +180,17 @@ const mapArr = [
       this.health = 50;
       this.projectiles = [];
       this.timer = 0;
-      this.target = null;
+      this.target = null; 
     }
     draw() {
-         // const marine = ctxRef.drawImage(<img src={require("../images/Marine/Marine-Front.png")} alt = "Marine"/>) 
-      // ctxRef.current.fillStyle = marine;
+      
       ctxRef.current.fillStyle = "blue";
       ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       ctxRef.current.fillStyle = "black";
       ctxRef.current.font = "20px Arial";
       ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
     }
-    update() {
+    update(){
       if(this.shooting){
       this.timer++;
       if(this.timer % 100 === 0){
@@ -218,7 +225,6 @@ const mapArr = [
 
       defenders[i].shooting = false;
       for(let j=0; j<enemies.length; j++){
-
       if(
         (enemies[j].y < (defenders[i].y + 150) &&
         enemies[j].y > (defenders[i].y - 150)  &&
@@ -265,7 +271,6 @@ const mapArr = [
     }
 
     updateTarget() {
-
       if(this.direction !== "down" && this.gridY-1 >=0 && mapArr[this.gridY - 1][this.gridX] === "X" ){
         this.direction = "up";
         this.gridY = this.gridY - 1;
@@ -286,12 +291,9 @@ const mapArr = [
         this.gridX = this.gridX + 1;
         this.targetX = this.gridX*cellSize + cellGap;
       }
-
     }
 
-
     update() {
-
       console.log("Direction: " + this.direction);
       console.log("Y: " + this.x);
       console.log("Target Y: " + this.targetX);
@@ -306,50 +308,58 @@ const mapArr = [
           this.x = this.targetX;
           this.updateTarget();
         }
-    
       }
       else if(this.direction === "right"){
        
         if(this.x <this.targetX){
           this.x += this.movement;
         }
-        
         if(this.x>= this.targetX){
           this.x = this.targetX;
           this.updateTarget();
         }
-    
       }
       else if(this.direction === "up"){
        
         if(this.y >this.targetY){
           this.y -= this.movement;
         }
-        
         if(this.y<= this.targetY){
           this.y = this.targetY;
           this.updateTarget();
-        }
-    
+        } 
       }
       else if(this.direction === "down"){
        
         if(this.y <this.targetY){
           this.y += this.movement;
-        }
-        
+        } 
         if(this.y>= this.targetY){
           this.y = this.targetY;
           this.updateTarget();
         }
-    
       }
-
    
     }
     draw() {
-      ctxRef.current.fillStyle = "red";
-      ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+      enemyImg.src = smiley;
+      if(enemyImg.complete){
+      ctxRef.current.drawImage(enemyImg,
+        this.x,
+        this.y,
+        this.width,
+        this.height);
+      }else{
+        enemyImg.onload = function(){
+          ctxRef.current.drawImage(enemyImg,
+            this.x,
+            this.y,
+            this.width,
+            this.height); 
+        }
+      }
+      // ctxRef.current.fillStyle = "red";
+      // ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       ctxRef.current.fillStyle = "black";
       ctxRef.current.font = "30px Arial";
       ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
@@ -368,13 +378,11 @@ const mapArr = [
         numberOfResources += gainedResources;
         score += gainedResources;
         enemies.splice(i, 1);
-
       }
     }
     if (frame % enemiesInterval === 0 && score < winningScore) {
       /* if set to 25, it brings an enemy one block down, weird */
-      enemies.push(new Enemy());
-      
+      enemies.push(new Enemy()); 
     }
   }
 
@@ -386,7 +394,7 @@ const mapArr = [
       this.width = 5;
       this.height = 5;
       this.power = 20;
-      this.speed = 5;
+      this.speed = 10;
       this.target = target;
     }
     update() {
@@ -485,7 +493,7 @@ const mapArr = [
 
   return (
     <div>
-      <div id="utility">{numberOfResources}</div>
+      <div id="title-title">Defend the Pillar of Autumn</div>
  
       <canvas
         id="canvas1"

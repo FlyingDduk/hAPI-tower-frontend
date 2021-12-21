@@ -9,12 +9,13 @@ body {
   /* To prevent any scrolling to extra part of window screen */
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  /* overflow-x: hidden;
+  overflow-y: hidden; */
 }
 
 body {
-  background-image: url(../src/images/background2.png);
+  /* background-image: url(../src/images/background2.png); */
+  background-color: black;
   /* To try to make the whole background show as much as we can */
   background-position: center fixed;
   background-repeat: no-repeat;
@@ -52,7 +53,6 @@ body {
 footer {
   position: relative;
   left: 30px;
-  top: -350px;
 }
 
 .App-link {

@@ -14,10 +14,10 @@ function App() {
           {/* <Gameboard /> */}
         </div>
         <div className="tower-choice">
-          <Towers />
+          {/* <Towers /> */}
         </div>
         <div className="enemy">
-          <Enemies />
+          {/* <Enemies /> */}
         </div>
       </main>
       <footer>

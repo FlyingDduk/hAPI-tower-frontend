@@ -33,6 +33,12 @@ function Enemies(props) {
           alt="Elite Master"
           className="enemies"
         />
+        <img
+        id= "Big-Boss"
+        src={require("../../images/Question.png")}
+        alt = "Big Boss"
+        className = "enemies"
+        />
     </div>
   );
 }

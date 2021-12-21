@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { DragSource } from "react-dnd";
 import "./Canvas.css";
 import smiley from '../../images/smiley.gif'
+import frowny from '../../images/Enemies/frowny.gif'
 import grunt from '../../images/Enemies/Grunt.png'
 import marine from '../../images/Marine/Marine-Front.png'
 import odst from '../../images/ODST/ODST-Front.png'
@@ -30,7 +31,7 @@ function Canvas(props) {
   const resources = [];
   const pathCells = [];
   const enemyImg = new Image();
-
+  const defenderImg = new Image();
   // const [numberOfResources, setNumberOfResources] = useState(300)
 
 //25 55
@@ -151,7 +152,7 @@ const mapArr = [
     handleEnemies();
     handleGameStatus();
     handleProjectiles();
-    handleResources();
+    // handleResources();
     frame++;
     if (!gameOver) requestAnimationFrame(animate);
   }
@@ -183,12 +184,27 @@ const mapArr = [
       this.target = null; 
     }
     draw() {
-      
-      ctxRef.current.fillStyle = "blue";
-      ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
-      ctxRef.current.fillStyle = "black";
-      ctxRef.current.font = "20px Arial";
-      ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
+      defenderImg.src = smiley;
+      if(defenderImg.complete){
+      ctxRef.current.drawImage(defenderImg,
+        this.x,
+        this.y,
+        this.width,
+        this.height);
+      }else{
+        defenderImg.onload = function(){
+          ctxRef.current.drawImage(defenderImg,
+            this.x,
+            this.y,
+            this.width,
+            this.height); 
+        }
+      }
+      // ctxRef.current.fillStyle = "blue";
+      // ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+      // ctxRef.current.fillStyle = "black";
+      // ctxRef.current.font = "20px Arial";
+      // ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
     }
     update(){
       if(this.shooting){
@@ -201,7 +217,6 @@ const mapArr = [
     }
     }
   }
-
   const handleMouseClick = () => {
     const gridPositionX = mouse.x - (mouse.x % cellSize) + cellGap;
     const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
@@ -235,17 +250,17 @@ const mapArr = [
           defenders[i].target = enemies[j];
       }
     }
-      for (let j = 0; j < enemies.length; j++) {
-        if (defenders[i] && collision(defenders[i], enemies[j])) {
-          enemies[j].movement = 0;
-          defenders[i].health -= 0.2;
-        }
-        if (defenders[i] && defenders[i].health <= 0) {
-          defenders.splice(i, 1);
-          i--;
-          enemies[j].movement = enemies[j].speed;
-        }
-      }
+      // for (let j = 0; j < enemies.length; j++) {
+      //   if (defenders[i] && collision(defenders[i], enemies[j])) {
+      //     enemies[j].movement = 0;
+      //     defenders[i].health -= 0.2;
+      //   }
+      //   if (defenders[i] && defenders[i].health <= 0) {
+      //     defenders.splice(i, 1);
+      //     i--;
+      //     enemies[j].movement = enemies[j].speed;
+      //   }
+      // }
     }
   }
 
@@ -338,11 +353,10 @@ const mapArr = [
           this.y = this.targetY;
           this.updateTarget();
         }
-      }
-   
+      } 
     }
     draw() {
-      enemyImg.src = smiley;
+      enemyImg.src = frowny;
       if(enemyImg.complete){
       ctxRef.current.drawImage(enemyImg,
         this.x,
@@ -423,7 +437,6 @@ const mapArr = [
           i--;
         }
       }
-
       if(projectiles[i] && projectiles[i].x > canvasRef.current.width - cellSize){
         projectiles.splice(i, 1);
         i--;
@@ -453,37 +466,37 @@ const mapArr = [
   }
 
   /* Resources */
-  const amounts = [20, 30, 40];
-  class Resource {
-    constructor(){
-      this.x = Math.random() * (canvasRef.current.width - cellSize);
-      this.y = (Math.floor(Math.random() * 5) +1) * cellSize + 25;
-      this.width = cellSize * 0.6;
-      this.height = cellSize * 0.6;
-      this.amount = amounts[Math.floor(Math.random()*amounts.length)];
-    }
-    draw(){
-      ctxRef.current.fillStyle = 'yellow';
-      ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
-      ctxRef.current.fillStyle = 'black';
-      ctxRef.current.font = '20px Arial'
-      ctxRef.current.fillText(this.amount, this.x + 15, this.y + 25)
-    }
-  }
+  // const amounts = [20, 30, 40];
+  // class Resource {
+  //   constructor(){
+  //     this.x = Math.random() * (canvasRef.current.width - cellSize);
+  //     this.y = (Math.floor(Math.random() * 5) +1) * cellSize + 25;
+  //     this.width = cellSize * 0.6;
+  //     this.height = cellSize * 0.6;
+  //     this.amount = amounts[Math.floor(Math.random()*amounts.length)];
+  //   }
+  //   draw(){
+  //     ctxRef.current.fillStyle = 'yellow';
+  //     ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+  //     ctxRef.current.fillStyle = 'black';
+  //     ctxRef.current.font = '20px Arial'
+  //     ctxRef.current.fillText(this.amount, this.x + 15, this.y + 25)
+  //   }
+  // }
 
-  function handleResources(){
-    if(frame % 500 === 0 && score < winningScore){
-      resources.push(new Resource());
-    }
-    for(let i = 0; i < resources.length; i++){
-      resources[i].draw();
-      if(resources[i] && mouse.x && mouse.y && collision(resources[i], mouse)){
-        numberOfResources += resources[i].amount;
-        resources.splice(i, 1);
-        i--;
-      }
-    }
-  }
+  // function handleResources(){
+  //   if(frame % 500 === 0 && score < winningScore){
+  //     resources.push(new Resource());
+  //   }
+  //   for(let i = 0; i < resources.length; i++){
+  //     resources[i].draw();
+  //     if(resources[i] && mouse.x && mouse.y && collision(resources[i], mouse)){
+  //       numberOfResources += resources[i].amount;
+  //       resources.splice(i, 1);
+  //       i--;
+  //     }
+  //   }
+  // }
 
 // Can't get this to work
 /* window.addEventListener('resize',function(){
@@ -493,7 +506,7 @@ const mapArr = [
 
   return (
     <div>
-      <div id="title-title">Defend the Pillar of Autumn</div>
+      <div id="title-title">hAPI Towers</div>
  
       <canvas
         id="canvas1"

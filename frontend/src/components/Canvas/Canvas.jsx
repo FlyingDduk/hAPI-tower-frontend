@@ -3,7 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import { DragSource } from "react-dnd";
 import "./Canvas.css";
 import smiley from '../../images/smiley.gif'
+import smileyGlasses from '../../images/SmileyGlass.png'
+import smileyLove from '../../images/SmileyLove.png'
 import frowny from '../../images/Enemies/frowny.gif'
+import blueFrowny from '../../images/Enemies/blueFrowny.png'
+import redFrowny from '../../images/Enemies/redFrowny.png'
 
 /* import grunt from '../../images/Enemies/Grunt.png'
 import marine from '../../images/Marine/Marine-Front.png'
@@ -26,7 +30,7 @@ function Canvas(props) {
   let gameOver = false;
   let roundChange = true;
   let frameAtRoundChange = 0;
-  let lives = 20;
+  let lives = 1;
   let enemiesSpawn = 0;
   let enemiesThisRound = 1;
   let round = 1;
@@ -119,7 +123,7 @@ const mapArr = [
         ctxRef.current.fillStyle = "#b5651e";
         ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       }
-      if(this.path == "L"){
+      if(this.path === "L"){
         ctxRef.current.fillStyle = "red";
         ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       }
@@ -289,12 +293,24 @@ const mapArr = [
       this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
-      this.speed = Math.random() *  0.5 + 0.9;
-      this.movement = this.speed;
-      this.health = 100;
-      this.maxHealth = this.health;
+      this.speed = Math.random() *  0.5 + 0.9; 
       this.enemyImage = new Image();
       this.enemyType = type; 
+      if(this.enemyType ==="Grunt"){
+        this.enemyImage.src = frowny
+        this.health = 100;
+        this.speed = Math.random() *  300; 
+      }else if(this.enemyType === "Speedster"){
+        this.enemyImage.src = blueFrowny
+        this.health = 50;
+        this.speed = Math.random() *  300
+      }else if(this.enemyType === "Tank"){
+        this.enemyImage.src = redFrowny
+        this.health = 300;
+        this.speed = Math.random() *  300;
+      }
+      this.maxHealth = this.health;
+      this.movement = this.speed;
     }
 
     updateTarget() {
@@ -386,16 +402,15 @@ const mapArr = [
       } 
     }
     draw() {
-      enemyImg.src = frowny;
-      if(enemyImg.complete){
-      ctxRef.current.drawImage(enemyImg,
+      if(this.enemyImage.complete){
+      ctxRef.current.drawImage(this.enemyImage,
         this.x,
         this.y,
         this.width,
         this.height);
       }else{
-        enemyImg.onload = function(){
-          ctxRef.current.drawImage(enemyImg,
+        this.enemyImage.onload = function(){
+          ctxRef.current.drawImage(this.enemyImage,
             this.x,
             this.y,
             this.width,
@@ -416,7 +431,10 @@ const mapArr = [
       enemies[i].draw();
       if (enemies[i].x <= endX) {
         enemies.splice(i,1)
-        lives--; 
+        lives--;
+        if(lives <= 0){
+          gameOver = true;
+        } 
       }else if(enemies[i].health <= 0){
         let gainedResources = enemies[i].maxHealth/10;
         numberOfResources += gainedResources;
@@ -425,7 +443,14 @@ const mapArr = [
       }
     }
     if (frame % enemiesInterval === 0 && enemiesSpawn < enemiesThisRound) {
-      enemies.push(new Enemy());
+      let enemyGen = Math.floor(Math.random() * 6) +1
+      if(enemyGen < 4){
+        enemies.push(new Enemy("Grunt"))
+      }else if(enemyGen === 4){
+        enemies.push(new Enemy("Speedster"))
+      }else{
+        enemies.push(new Enemy("Tank"))
+      }
       enemiesSpawn++; 
     }
   }
@@ -488,7 +513,7 @@ const mapArr = [
       ctxRef.current.font = "60px Arial";
       ctxRef.current.fillText("GAME OVER", 135, 330);
     }
-    if (enemiesSpawn >= enemiesThisRound && enemies.length === 0){
+    if (enemiesSpawn >= enemiesThisRound && enemies.length === 0 && gameOver === false){
       if(roundChange){ 
         frameAtRoundChange = frame;
         numberOfResources += 300;

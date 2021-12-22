@@ -11,14 +11,15 @@ body {
   padding: 0;
   /* overflow-x: hidden;
   overflow-y: hidden; */
+
 }
 
 body {
   /* background-image: url(../src/images/background2.png); */
-  background-color: black;
+  background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
   /* To try to make the whole background show as much as we can */
   background-position: center fixed;
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
   background-size: cover;
 }
 
@@ -38,26 +39,31 @@ body {
 .navbar-boiz {
   font-size: 10px;
   position: relative;
-  /* margin: -50px; */
+  left: -20px;
   display: flex;
   justify-content: center;
   list-style-type: none;
+
 }
 
 .navbar-boiz a {
-  color: white;
+  color: rgb(30, 97, 184);
   padding-left: 3px;
   padding-right: 3px;
+  text-decoration: none;
 }
 
+#tower-boiz {
+  color: black;
+  font-weight: bold;
+}
 footer {
   position: relative;
-  left: 30px;
+  margin: auto;
 }
-
-.App-link {
+/* .App-link {
   color: #61dafb;
-}
+} */
 
 @media only screen and (max-width: 1900px) {
   .tower-choice {
@@ -86,8 +92,4 @@ footer {
     left: 1850px;
     top: -600px;
   }
-}
-
-#tower-boiz {
-  color: yellow;
 }

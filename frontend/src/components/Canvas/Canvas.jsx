@@ -23,19 +23,23 @@ function Canvas(props) {
   let frame = 0;
   let score = 0;
   let gameOver = false;
+  let roundChange = true;
+  let frameAtRoundChange = 0;
+  let lives = 20;
+  let enemiesSpawn = 0;
+  let enemiesThisRound = 1;
+  let round = 1;
   const winningScore = 30;
   const defenders = [];
   const enemies = [];
-  const enemyPositions = []
   const projectiles = [];
   const resources = [];
   const pathCells = [];
   const enemyImg = new Image();
   const defenderImg = new Image();
-  // const [numberOfResources, setNumberOfResources] = useState(300)
-
+  
 //25 55
- 
+/* Makes the path on map */ 
 const mapArr = [
     ["O","O","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","X","X","X","X","X","O","O","O",],
@@ -138,6 +142,19 @@ const mapArr = [
     }
   }
 
+  function collision(first, second) {
+    if (
+      !(
+        first.x > second.x + second.width ||
+        first.x + first.width < second.x ||
+        first.y > second.y + second.height ||
+        first.y + first.height < second.y
+      )
+    ){
+      return true;
+    }
+  }
+
   /* =====================Animate on Gameboard===================== */
   function animate() {
     ctxRef.current.clearRect(
@@ -155,19 +172,6 @@ const mapArr = [
     // handleResources();
     frame++;
     if (!gameOver) requestAnimationFrame(animate);
-  }
-
-  function collision(first, second) {
-    if (
-      !(
-        first.x > second.x + second.width ||
-        first.x + first.width < second.x ||
-        first.y > second.y + second.height ||
-        first.y + first.height < second.y
-      )
-    ){
-      return true;
-    }
   }
 
   /* =====================Defender===================== */
@@ -264,7 +268,6 @@ const mapArr = [
     }
   }
 
-
   /* =====================Enemies===================== */
   //24 13
   //gridArr[13][24] is starting path coordinate
@@ -279,7 +282,7 @@ const mapArr = [
       this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
-      this.speed = Math.random() * 0.2 + 0.4;
+      this.speed = Math.random() * 0.4 + 0.7;
       this.movement = this.speed;
       this.health = 100;
       this.maxHealth = this.health;
@@ -317,8 +320,7 @@ const mapArr = [
        
         if(this.x >this.targetX){
           this.x -= this.movement;
-        }
-        
+        } 
         if(this.x<= this.targetX){
           this.x = this.targetX;
           this.updateTarget();
@@ -334,8 +336,7 @@ const mapArr = [
           this.updateTarget();
         }
       }
-      else if(this.direction === "up"){
-       
+      else if(this.direction === "up"){ 
         if(this.y >this.targetY){
           this.y -= this.movement;
         }
@@ -345,7 +346,6 @@ const mapArr = [
         } 
       }
       else if(this.direction === "down"){
-       
         if(this.y <this.targetY){
           this.y += this.movement;
         } 
@@ -394,9 +394,9 @@ const mapArr = [
         enemies.splice(i, 1);
       }
     }
-    if (frame % enemiesInterval === 0 && score < winningScore) {
-      /* if set to 25, it brings an enemy one block down, weird */
-      enemies.push(new Enemy()); 
+    if (frame % enemiesInterval === 0 && enemiesSpawn < enemiesThisRound) {
+      enemies.push(new Enemy());
+      enemiesSpawn++; 
     }
   }
 
@@ -451,17 +451,33 @@ const mapArr = [
     ctxRef.current.fillStyle = 'gold';
     ctxRef.current.fillText('Score: ' + score,10,35);
     ctxRef.current.fillText('Resources: ' + numberOfResources, 10, 65)
+    ctxRef.current.fillText('Round: ' + round, 10, 95);
+    ctxRef.current.fillText('Lives: ' + lives, 10, 125);
     if (gameOver) {
       ctxRef.current.fillStyle = "black";
       ctxRef.current.font = "60px Arial";
       ctxRef.current.fillText("GAME OVER", 135, 330);
     }
-    if (score >= winningScore && enemies.length === 0){
+    if (enemiesSpawn >= enemiesThisRound && enemies.length === 0){
+      if(roundChange){ 
+        frameAtRoundChange = frame;
+        numberOfResources += 300;
+        roundChange = false;
+      }
       ctxRef.current.fillStyle = 'black';
       ctxRef.current.font = '60px Arial';
       ctxRef.current.fillText('LEVEL COMPLETE', 130, 300);
       ctxRef.current.font = '30px Arial';
-      ctxRef.current.fillText('You win with ' + score + 'points!', 134, 340);
+      ctxRef.current.fillText('Moving onto next stage!', 134, 340);    
+      ctxRef.current.font = '30px Arial';
+      ctxRef.current.fillText(Math.trunc((3-((frame-frameAtRoundChange)/60))) + ' seconds left until next round', 138, 380);  
+      if(Math.trunc((3-((frame-frameAtRoundChange)/60))) <= 0) {
+        round++;
+        roundChange = true;
+        enemiesThisRound += 5;
+        enemiesSpawn = 0;
+
+      }
     } 
   }
 
@@ -502,7 +518,6 @@ const mapArr = [
 /* window.addEventListener('resize',function(){
   canvasPositionRef = canvasRef.getBoundingClientReact();
 })  */
-
 
   return (
     <div>

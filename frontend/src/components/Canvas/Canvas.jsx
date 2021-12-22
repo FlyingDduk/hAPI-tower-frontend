@@ -4,11 +4,12 @@ import { DragSource } from "react-dnd";
 import "./Canvas.css";
 import smiley from '../../images/smiley.gif'
 import frowny from '../../images/Enemies/frowny.gif'
-import grunt from '../../images/Enemies/Grunt.png'
+
+/* import grunt from '../../images/Enemies/Grunt.png'
 import marine from '../../images/Marine/Marine-Front.png'
 import odst from '../../images/ODST/ODST-Front.png'
 import mc from '../../images/MC/MC-Front.png'
-import johnson from '../../images/Johnson/Johnson-Front.png'
+import johnson from '../../images/Johnson/Johnson-Front.png' */
 
 
 function Canvas(props) {
@@ -29,15 +30,14 @@ function Canvas(props) {
   let enemiesSpawn = 0;
   let enemiesThisRound = 1;
   let round = 1;
-  const winningScore = 30;
+  let endY = 0;
+  let endX = 0;
   const defenders = [];
   const enemies = [];
   const projectiles = [];
-  const resources = [];
-  const pathCells = [];
   const enemyImg = new Image();
   const defenderImg = new Image();
-  
+   
 //25 55
 /* Makes the path on map */ 
 const mapArr = [
@@ -47,7 +47,7 @@ const mapArr = [
     ["O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","O","O","O","X","X","X","X","X","X","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","X","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","O","O","O","O","X","X","O","O","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","O","O","O","O","X","O","O","O",],
     ["O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","X","O","O","O","O","O","O","O","X","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","O","X","O","O","O","O","O","X","O","O","O",],
-    ["X","X","X","X","X","O","O","O","O","O","O","O","O","O","X","X","X","O","X","X","O","O","O","O","O","O","O","O","X","O","O","X","X","X","X","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","X","O","O","O",],
+    ["L","X","X","X","X","O","O","O","O","O","O","O","O","O","X","X","X","O","X","X","O","O","O","O","O","O","O","O","X","O","O","X","X","X","X","O","O","O","O","O","O","O","O","O","O","X","X","X","X","X","O","X","O","O","O",],
     ["O","O","O","O","X","O","O","O","X","X","X","X","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","O","O","X","O","O","X","O","O","O","O","O","X","X","X","X","O","O","O","O","O","X","O","X","X","O","O",],
     ["O","O","O","O","X","O","O","O","X","O","O","O","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","X","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
     ["O","O","O","O","X","O","O","O","X","O","O","O","X","O","X","O","X","O","X","O","O","O","O","O","O","O","O","O","O","X","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O","O","O","O","X","O","O","X","O","O",],
@@ -111,12 +111,16 @@ const mapArr = [
     }
 
     draw() {
-      if (collision(this, mouse) && !this.path) {
+      if (collision(this, mouse) && this.path=== "O") {
         ctxRef.current.strokeStyle = "black";
         ctxRef.current.strokeRect(this.x, this.y, this.width, this.height);
       }
-      if(this.path){
+      if(this.path === "X"){
         ctxRef.current.fillStyle = "#b5651e";
+        ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
+      }
+      if(this.path == "L"){
+        ctxRef.current.fillStyle = "red";
         ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       }
     }
@@ -128,10 +132,13 @@ const mapArr = [
       for (let y = 0; y < canvasRef.current.height; y += cellSize) {
         for (let x = 0; x < canvasRef.current.width; x += cellSize) {
           if(mapArr[y/cellSize][x/cellSize] === "X"){
-            gameGrid.push(new Cell(x, y,true));
+            gameGrid.push(new Cell(x, y,"X"));
+          } else if(mapArr[y/cellSize][x/cellSize] === "L"){
+            gameGrid.push(new Cell(x, y,"L"));
           }
-          else{gameGrid.push(new Cell(x, y,false));}
+          else{gameGrid.push(new Cell(x, y,"O"));}
         }
+        
       }
     }
   }
@@ -272,7 +279,7 @@ const mapArr = [
   //24 13
   //gridArr[13][24] is starting path coordinate
   class Enemy {
-    constructor() {
+    constructor(type) {
       this.gridX = 54;
       this.gridY = 13;
       this.targetX = cellSize*54 + cellGap;
@@ -282,32 +289,55 @@ const mapArr = [
       this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
-      this.speed = Math.random() * 0.4 + 0.7;
+      this.speed = Math.random() *  0.5 + 0.9;
       this.movement = this.speed;
       this.health = 100;
       this.maxHealth = this.health;
+      this.enemyImage = new Image();
+      this.enemyType = type; 
     }
 
     updateTarget() {
-      if(this.direction !== "down" && this.gridY-1 >=0 && mapArr[this.gridY - 1][this.gridX] === "X" ){
+      if(this.direction !== "down" && this.gridY-1 >=0 && (mapArr[this.gridY - 1][this.gridX] === "X" || 
+      mapArr[this.gridY - 1][this.gridX] === "L")){
+       
         this.direction = "up";
         this.gridY = this.gridY - 1;
         this.targetY = this.gridY*cellSize + cellGap;
+        if(mapArr[this.gridY - 1][this.gridX] === "L"){
+          endY = this.targetY;
+          endX = this.targetX;
+        }
       }
-      else if(this.direction !== "up" && this.gridY+1 <=25 && mapArr[this.gridY + 1][this.gridX] === "X" ){
+      else if(this.direction !== "up" && this.gridY+1 <=25 && (mapArr[this.gridY + 1][this.gridX] === "X" ||
+     mapArr[this.gridY + 1][this.gridX] === "L")){
         this.direction = "down";
         this.gridY = this.gridY + 1;
         this.targetY = this.gridY*cellSize + cellGap;
+        if(mapArr[this.gridY + 1][this.gridX] === "L"){
+          endY = this.targetY;
+          endX = this.targetX;
+        }
       }
-      else if(this.direction !== "right" && this.gridX-1 >=0 && mapArr[this.gridY][this.gridX - 1] === "X" ){
+      else if(this.direction !== "right" && this.gridX-1 >=0 && (mapArr[this.gridY][this.gridX - 1] === "X" ||
+      mapArr[this.gridY][this.gridX - 1] === "L")){
         this.direction = "left";
         this.gridX = this.gridX - 1;
         this.targetX = this.gridX*cellSize + cellGap;
+        if(mapArr[this.gridY][this.gridX - 1] === "L"){
+          endY = this.targetY;
+          endX = this.targetX;
+        }
       }
-      else if(this.direction !== "left" && this.gridX+1 <=54 && mapArr[this.gridY][this.gridX + 1] === "X" ){
+      else if(this.direction !== "left" && this.gridX+1 <=54 && (mapArr[this.gridY][this.gridX + 1] === "X" ||
+      mapArr[this.gridY][this.gridX + 1] === "L" )){
         this.direction = "right";
         this.gridX = this.gridX + 1;
         this.targetX = this.gridX*cellSize + cellGap;
+        if(mapArr[this.gridY][this.gridX + 1] === "L" ){
+          endY = this.targetY;
+          endX = this.targetX;
+        }
       }
     }
 
@@ -384,10 +414,10 @@ const mapArr = [
     for (let i = 0; i < enemies.length; i++) {
       enemies[i].update();
       enemies[i].draw();
-      if (enemies[i].x < 0) {
-        gameOver = true;
-      }
-      if(enemies[i].health <= 0){
+      if (enemies[i].x <= endX) {
+        enemies.splice(i,1)
+        lives--; 
+      }else if(enemies[i].health <= 0){
         let gainedResources = enemies[i].maxHealth/10;
         numberOfResources += gainedResources;
         score += gainedResources;
@@ -480,6 +510,9 @@ const mapArr = [
       }
     } 
   }
+
+
+
 
   /* Resources */
   // const amounts = [20, 30, 40];

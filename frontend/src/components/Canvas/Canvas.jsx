@@ -24,13 +24,13 @@ function Canvas(props) {
   const ctxRef = useRef(null);
   const canvasPositionRef = useRef(null); 
   let numberOfResources = 300;
-  let enemiesInterval = 600;
+  let enemiesInterval = 200;
   let frame = 0;
   let score = 0;
   let gameOver = false;
   let roundChange = true;
   let frameAtRoundChange = 0;
-  let lives = 1;
+  let lives = 20;
   let enemiesSpawn = 0;
   let enemiesThisRound = 1;
   let round = 1;
@@ -174,7 +174,6 @@ const mapArr = [
       canvasRef.current.width,
       canvasRef.current.height
     );
-
     handleGameGrid();
     handleDefenders();
     handleEnemies();
@@ -193,7 +192,7 @@ const mapArr = [
       this.width = cellSize - cellGap*2;
       this.height = cellSize - cellGap*2;
       this.shooting = false;
-      this.health = 50;
+      // this.health = 50;
       this.projectiles = [];
       this.timer = 0;
       this.target = null; 
@@ -293,21 +292,21 @@ const mapArr = [
       this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
-      this.speed = Math.random() *  0.5 + 0.9; 
+      // this.speed = Math.random() *  0.5 + 0.9; 
       this.enemyImage = new Image();
       this.enemyType = type; 
       if(this.enemyType ==="Grunt"){
         this.enemyImage.src = frowny
         this.health = 100;
-        this.speed = Math.random() *  300; 
+        this.speed = 2
       }else if(this.enemyType === "Speedster"){
         this.enemyImage.src = blueFrowny
         this.health = 50;
-        this.speed = Math.random() *  300
+        this.speed = 3
       }else if(this.enemyType === "Tank"){
         this.enemyImage.src = redFrowny
         this.health = 300;
-        this.speed = Math.random() *  300;
+        this.speed = 1;
       }
       this.maxHealth = this.health;
       this.movement = this.speed;
@@ -420,7 +419,7 @@ const mapArr = [
       // ctxRef.current.fillStyle = "red";
       // ctxRef.current.fillRect(this.x, this.y, this.width, this.height);
       ctxRef.current.fillStyle = "black";
-      ctxRef.current.font = "30px Arial";
+      ctxRef.current.font = "15px Arial";
       ctxRef.current.fillText(Math.floor(this.health), this.x, this.y);
     }
   }
@@ -526,18 +525,14 @@ const mapArr = [
       ctxRef.current.fillText('Moving onto next stage!', 134, 340);    
       ctxRef.current.font = '30px Arial';
       ctxRef.current.fillText(Math.trunc((3-((frame-frameAtRoundChange)/60))) + ' seconds left until next round', 138, 380);  
-      if(Math.trunc((3-((frame-frameAtRoundChange)/60))) <= 0) {
+      if(Math.trunc((5-((frame-frameAtRoundChange)/60))) <= 0) {
         round++;
         roundChange = true;
         enemiesThisRound += 5;
         enemiesSpawn = 0;
-
       }
     } 
   }
-
-
-
 
   /* Resources */
   // const amounts = [20, 30, 40];

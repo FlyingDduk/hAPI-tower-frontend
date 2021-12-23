@@ -24,7 +24,7 @@ function Canvas(props) {
   const ctxRef = useRef(null);
   const canvasPositionRef = useRef(null); 
   let numberOfResources = 300;
-  let enemiesInterval = 200;
+  let enemiesInterval = Math.floor(Math.random() * (300) + 50);
   let frame = 0;
   let score = 0;
   let gameOver = false;
@@ -39,7 +39,7 @@ function Canvas(props) {
   const defenders = [];
   const enemies = [];
   const projectiles = [];
-  const enemyImg = new Image();
+  // const enemyImg = new Image();
   const defenderImg = new Image();
    
 //25 55
@@ -195,7 +195,25 @@ const mapArr = [
       // this.health = 50;
       this.projectiles = [];
       this.timer = 0;
-      this.target = null; 
+      this.target = null;
+      /* 
+      this.defenderImg = new Image()
+      this.defenderType = type;
+      if(this.defenderType === "Marine"){
+        this.defenderImg.src =  smiley;
+        this,power = 15;
+        this.powerSpeed = 10; 
+      }else if{this.defenderType === "Lieutenant"){
+        this.defenderImg.src =  smileyLove; 
+        this,power = 10;
+        this.powerSpeed = 15;
+      }else if{this.defenderType === "Captain"){
+        this.defenderImg.src =  smileyGlasses 
+        this,power = 50;
+        this.powerSpeed = 5;
+      } 
+      
+      */ 
     }
     draw() {
       defenderImg.src = smiley;
@@ -292,19 +310,18 @@ const mapArr = [
       this.y = cellSize*13 + cellGap;
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
-      // this.speed = Math.random() *  0.5 + 0.9; 
-      this.enemyImage = new Image();
+      this.enemyImg = new Image();
       this.enemyType = type; 
       if(this.enemyType ==="Grunt"){
-        this.enemyImage.src = frowny
+        this.enemyImg.src = frowny
         this.health = 100;
         this.speed = 2
       }else if(this.enemyType === "Speedster"){
-        this.enemyImage.src = blueFrowny
+        this.enemyImg.src = blueFrowny
         this.health = 50;
         this.speed = 3
       }else if(this.enemyType === "Tank"){
-        this.enemyImage.src = redFrowny
+        this.enemyImg.src = redFrowny
         this.health = 300;
         this.speed = 1;
       }
@@ -401,15 +418,15 @@ const mapArr = [
       } 
     }
     draw() {
-      if(this.enemyImage.complete){
-      ctxRef.current.drawImage(this.enemyImage,
+      if(this.enemyImg.complete){
+      ctxRef.current.drawImage(this.enemyImg,
         this.x,
         this.y,
         this.width,
         this.height);
       }else{
-        this.enemyImage.onload = function(){
-          ctxRef.current.drawImage(this.enemyImage,
+        this.enemyImg.onload = function(){
+          ctxRef.current.drawImage(this.enemyImg,
             this.x,
             this.y,
             this.width,
@@ -515,7 +532,7 @@ const mapArr = [
     if (enemiesSpawn >= enemiesThisRound && enemies.length === 0 && gameOver === false){
       if(roundChange){ 
         frameAtRoundChange = frame;
-        numberOfResources += 300;
+        numberOfResources += 150;
         roundChange = false;
       }
       ctxRef.current.fillStyle = 'black';

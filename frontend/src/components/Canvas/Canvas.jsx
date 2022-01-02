@@ -32,7 +32,7 @@ function Canvas(props) {
   let frameAtRoundChange = 0;
   let lives = 20;
   let enemiesSpawn = 0;
-  let enemiesThisRound = 1;
+  let enemiesThisRound = 3;
   let round = 1;
   let endY = 0;
   let endX = 0;
@@ -253,11 +253,11 @@ const mapArr = [
     const gridPositionX = mouse.x - (mouse.x % cellSize) + cellGap;
     const gridPositionY = mouse.y - (mouse.y % cellSize) + cellGap;
     for (let i = 0; i < defenders.length; i++) {
-      if (defenders[i].x === gridPositionX && defenders[i].y === gridPositionY)
+      if (defenders[i].x === gridPositionX && defenders[i].y === gridPositionY )
         return;
     }
     let defenderCost = 100;
-    if (numberOfResources >= defenderCost) {
+    if (numberOfResources >= defenderCost ) {
       defenders.push(new Defender(gridPositionX, gridPositionY));
       numberOfResources -= defenderCost;
     }
@@ -267,9 +267,7 @@ const mapArr = [
     for (let i = 0; i < defenders.length; i++) {
       defenders[i].draw();
       defenders[i].update();
-      /* This check if enemy is in row. If so, it will shoot */
-      /* Not working correctly */
-
+      
       defenders[i].shooting = false;
       for(let j=0; j<enemies.length; j++){
       if(
@@ -311,22 +309,27 @@ const mapArr = [
       this.width = cellSize - cellGap * 2;
       this.height = cellSize - cellGap * 2;
       this.enemyImg = new Image();
-      this.enemyType = type; 
+      this.enemyType = type;
+      
       if(this.enemyType ==="Grunt"){
         this.enemyImg.src = frowny
-        this.health = 100;
-        this.speed = 2
+        this.health = 150;
+        this.speed = 1.5;
+        this.enemyAtt = 1;
       }else if(this.enemyType === "Speedster"){
         this.enemyImg.src = blueFrowny
-        this.health = 50;
-        this.speed = 3
+        this.health = 100;
+        this.speed = 3;
+        this.enemyAtt = 3;
       }else if(this.enemyType === "Tank"){
         this.enemyImg.src = redFrowny
         this.health = 300;
-        this.speed = 1;
+        this.speed = 0.8;
+        this.enemyAtt = 5;
       }
       this.maxHealth = this.health;
       this.movement = this.speed;
+      this.enemyAttack = this.enemyAtt;
     }
 
     updateTarget() {
@@ -445,12 +448,15 @@ const mapArr = [
     for (let i = 0; i < enemies.length; i++) {
       enemies[i].update();
       enemies[i].draw();
+      /* ===When enemy gets to red box at end of trail=== */
       if (enemies[i].x <= endX) {
         enemies.splice(i,1)
-        lives--;
+        // lives = lives - this.enemyAttack;
+        lives --;
         if(lives <= 0){
           gameOver = true;
-        } 
+        }
+        /* ===When enemies die=== */ 
       }else if(enemies[i].health <= 0){
         let gainedResources = enemies[i].maxHealth/10;
         numberOfResources += gainedResources;
@@ -458,15 +464,35 @@ const mapArr = [
         enemies.splice(i, 1);
       }
     }
+
+    /* Random Enemy Generator (1-3) = Grunt   (4) = Tank   (5-6) = Speedster */
     if (frame % enemiesInterval === 0 && enemiesSpawn < enemiesThisRound) {
       let enemyGen = Math.floor(Math.random() * 6) +1
-      if(enemyGen < 4){
+      if(round < 11){
+        if(enemyGen < 4){
+          enemies.push(new Enemy("Grunt"))
+        }else if(enemyGen === 4 && round > 4){
+          enemies.push(new Enemy("Tank"))
+        }else if (enemyGen > 5 && round > 5){
+          enemies.push(new Enemy("Speedster"))
+        }
+    }else if (round > 10 && round < 21){
+      if(enemyGen < 3){
         enemies.push(new Enemy("Grunt"))
-      }else if(enemyGen === 4){
-        enemies.push(new Enemy("Speedster"))
-      }else{
+      }else if((enemyGen === 3 || enemyGen === 4)){
         enemies.push(new Enemy("Tank"))
+      }else if (enemyGen > 5){
+        enemies.push(new Enemy("Speedster"))
       }
+    }else if (round > 20){
+      if(enemyGen === 1){
+        enemies.push(new Enemy("Grunt"))
+      }else if((enemyGen === 2 || enemyGen === 3)){
+        enemies.push(new Enemy("Tank"))
+      }else if (enemyGen > 3){
+        enemies.push(new Enemy("Speedster"))
+      } 
+    }
       enemiesSpawn++; 
     }
   }
@@ -476,10 +502,10 @@ const mapArr = [
     constructor(x, y, target) {
       this.x = x;
       this.y = y;
-      this.width = 5;
-      this.height = 5;
+      this.width = 3;
+      this.height = 3;
       this.power = 20;
-      this.speed = 10;
+      this.speed = 7;
       this.target = target;
     }
     update() {
@@ -517,24 +543,26 @@ const mapArr = [
 
   /* =====================Utilities===================== */
   function handleGameStatus() {
-    // ctxRef.fillStyle = 'white';
-    // ctxRef.font = "30px Arial";
+    /* ===What User currently has=== */
     ctxRef.current.fillStyle = 'gold';
     ctxRef.current.fillText('Score: ' + score,10,35);
     ctxRef.current.fillText('Resources: ' + numberOfResources, 10, 65)
     ctxRef.current.fillText('Round: ' + round, 10, 95);
     ctxRef.current.fillText('Lives: ' + lives, 10, 125);
+    /* ===Game Over Message */
     if (gameOver) {
       ctxRef.current.fillStyle = "black";
       ctxRef.current.font = "60px Arial";
       ctxRef.current.fillText("GAME OVER", 135, 330);
     }
+    /* ===Winning Round Conditions=== */
     if (enemiesSpawn >= enemiesThisRound && enemies.length === 0 && gameOver === false){
       if(roundChange){ 
         frameAtRoundChange = frame;
         numberOfResources += 150;
         roundChange = false;
       }
+      /* ===What Round Change Will Do=== */
       ctxRef.current.fillStyle = 'black';
       ctxRef.current.font = '60px Arial';
       ctxRef.current.fillText('LEVEL COMPLETE', 130, 300);

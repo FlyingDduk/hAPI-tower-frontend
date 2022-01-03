@@ -96,7 +96,7 @@ const mapArr = [
     canvas.height = 750;
 
     const ctx = canvas.getContext("2d");
-    const canvasPosition = canvas.getBoundingClientRect();
+    let canvasPosition = canvas.getBoundingClientRect();
 
     canvasPositionRef.current = canvasPosition;
     ctxRef.current = ctx;
@@ -477,6 +477,7 @@ const mapArr = [
           enemies.push(new Enemy("Speedster"))
         }
     }else if (round > 10 && round < 21){
+      enemiesInterval = Math.floor(Math.random() * (200) + 50);
       if(enemyGen < 3){
         enemies.push(new Enemy("Grunt"))
       }else if((enemyGen === 3 || enemyGen === 4)){
@@ -485,6 +486,7 @@ const mapArr = [
         enemies.push(new Enemy("Speedster"))
       }
     }else if (round > 20){
+      enemiesInterval = Math.floor(Math.random() * (100) + 50);
       if(enemyGen === 1){
         enemies.push(new Enemy("Grunt"))
       }else if((enemyGen === 2 || enemyGen === 3)){
@@ -613,9 +615,9 @@ const mapArr = [
   // }
 
 // Can't get this to work
-/* window.addEventListener('resize',function(){
-  canvasPositionRef = canvasRef.getBoundingClientReact();
-})  */
+window.addEventListener('resize',function(){
+  canvasPositionRef.current = canvasRef.current.getBoundingClientRect();
+}) 
 
   return (
     <div>

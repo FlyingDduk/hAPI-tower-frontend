@@ -1,25 +1,26 @@
 .App {
   text-align: center;
-  margin-left:auto;
-  margin-right:auto;
-  background-color: black;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-
-html,body {
+html,
+body {
   /* To prevent any scrolling to extra part of window screen */
-  margin:0;
-  padding:0;
-  overflow-x:hidden;
-  overflow-y:hidden;
+  margin: 0;
+  padding: 0;
+  /* overflow-x: hidden;
+  overflow-y: hidden; */
+
 }
 
 body {
-  /* background-image: url(./components/images/background2.png); */
+  /* background-image: url(../src/images/background2.png); */
+  background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
   /* To try to make the whole background show as much as we can */
   background-position: center fixed;
-  background-repeat: no-repeat;
-  background-size: 2000px;
+  /* background-repeat: no-repeat; */
+  background-size: cover;
 }
 
 .App-header {
@@ -38,23 +39,57 @@ body {
 .navbar-boiz {
   font-size: 10px;
   position: relative;
-  /* margin: -50px; */
+  left: -20px;
   display: flex;
   justify-content: center;
-  list-style-type: none; 
+  list-style-type: none;
+
 }
 
 .navbar-boiz a {
-  color: white;
+  color: rgb(30, 97, 184);
+  padding-left: 3px;
+  padding-right: 3px;
+  text-decoration: none;
 }
 
+#tower-boiz {
+  color: black;
+  font-weight: bold;
+}
 footer {
   position: relative;
-  /* left: 100px; */
-
+  margin: auto;
 }
-
-.App-link {
+/* .App-link {
   color: #61dafb;
-}
+} */
 
+@media only screen and (max-width: 1900px) {
+  .tower-choice {
+    position: relative;
+    left: 100px;
+    width: 200px;
+    top: -40px;
+  }
+
+  .enemy {
+    width: 300px;
+    position: relative;
+    left: 1350px;
+    top: -90px;
+  }
+}
+@media only screen and (min-width: 1900px) {
+  .tower-choice {
+    position: relative;
+    left: 50px;
+    top: -450px;
+  }
+
+  .enemy {
+    position: relative;
+    left: 1850px;
+    top: -600px;
+  }
+}

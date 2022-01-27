@@ -1,8 +1,16 @@
 #canvas1{
-    background: white;
+    background: linear-gradient(to top, #2b5a2b, #39ac2f);
     position: relative;
     width: 1650px;
     height: 750px;
     justify-content: center;
     margin: 50px;
 }
+
+#title-title {
+    color: rgb(72, 206, 143);
+    font-size: 50px;
+    margin: 10px 0px -30px 0px;
+    
+}
+

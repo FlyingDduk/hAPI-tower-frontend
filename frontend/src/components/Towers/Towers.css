@@ -1,19 +1,28 @@
 /* Changes size of each tower */
 img {
-    /* position: relative; */
     height: 30px;
     width: 30px;
-    /* margin-bottom: 5px */
 }
 
+@media only screen and (min-width: 1900px) {
 .towers {
-    position: relative;
-    /* height:50px;
-    width: 50px; */
-    left: 830px;
-    margin-bottom: 10px;
+    margin: 10px;
+    display: block
 }
 
-/* .tower-container {
+.tower-container {
+    background: rgba(141, 204, 212, 0.521);
     width: 50px;
-} */
+}
+}
+
+@media only screen and (max-width: 1900px) {
+    .towers {
+        margin: 10px;
+    }
+    
+    .tower-container {
+        background: rgba(141, 204, 212, 0.521);
+        width: 250px;
+    }
+}
